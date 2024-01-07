@@ -83,18 +83,11 @@ namespace Strawberry::Window
 		static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
 
 
-		Core::Math::Vec2f ScaleCoordinate(Core::Math::Vec2 in) const;
-
-
 	private:
 		GLFWwindow* mHandle;
 		std::deque<Event> mEventQueue;
 
-
-		Core::Math::Vec2u mLogicalSize;
-
 		Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;
-
 
 		std::string mTitle;
 	};

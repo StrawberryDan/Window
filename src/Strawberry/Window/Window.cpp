@@ -32,7 +32,6 @@ namespace Strawberry::Window
 
 	Window::Window(const std::string& title, Core::Math::Vec2i size)
 		: mTitle(title)
-		, mLogicalSize(size)
 	{
 		if (sInstanceCount++ == 0) Initialise();
 
@@ -54,7 +53,6 @@ namespace Strawberry::Window
 	Window::Window(Window&& rhs) noexcept
 		: mHandle(std::exchange(rhs.mHandle, nullptr))
 		, mEventQueue(std::move(rhs.mEventQueue))
-		, mLogicalSize(std::move(rhs.mLogicalSize))
 		, mPreviousMousePosition(std::move(rhs.mPreviousMousePosition))
 	{
 		sInstanceMap.Lock()->insert_or_assign(mHandle, this);
@@ -211,7 +209,7 @@ namespace Strawberry::Window
 		Core::Math::Vec2f newPos(x, y);
 
 		Events::MouseMove event {
-			.position = window->ScaleCoordinate(Core::Math::Vec2(x, y)),
+			.position = Core::Math::Vec2f(x, y),
 			.deltaPosition = window->mPreviousMousePosition
 				.Map([=](const auto& prev) { return newPos - prev; })
 				.UnwrapOr(Core::Math::Vec2u()),
@@ -270,18 +268,10 @@ namespace Strawberry::Window
 			.button = GetButton(button),
 			.modifiers = GetModifier(mods),
 			.action = GetAction(action),
-			.position = window->ScaleCoordinate(position)
+			.position = position.AsType<float>()
 		};
 
 		window->mEventQueue.emplace_back(event);
-	}
-
-
-	Core::Math::Vec2f Window::ScaleCoordinate(Core::Math::Vec2 in) const
-	{
-		auto windowSize = GetSize();
-		auto ratio = Core::Math::Vec2(static_cast<double>(mLogicalSize[0]) / windowSize[0], static_cast<double>(mLogicalSize[1]) / windowSize[1]);
-		return (in * ratio).AsType<float>();
 	}
 
 
