@@ -24,7 +24,7 @@
 //======================================================================================================================
 //  Foreward Declaration
 //----------------------------------------------------------------------------------------------------------------------
-namespace Strawberry::Graphics::Vulkan { class Surface; }
+namespace Strawberry::Vulkan { class Surface; }
 
 
 //======================================================================================================================
@@ -34,7 +34,7 @@ namespace Strawberry::Window
 {
 	class Window
 	{
-		friend class Graphics::Vulkan::Surface;
+		friend class Vulkan::Surface;
 
 
 	private:
