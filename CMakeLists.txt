@@ -3,6 +3,13 @@ project(StrawberryWindow)
 include(FetchContent)
 
 
+FetchContent_Declare(StrawberryConfig
+        GIT_REPOSITORY "https://github.com/StrawberryDan/Config.git"
+        GIT_TAG "main")
+FetchContent_MakeAvailable(StrawberryConfig)
+include(StrawberryConfig)
+
+
 if (NOT TARGET StrawberryWindow)
     if (NOT TARGET StrawberryCore AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../Core)
         add_subdirectory(../Core ${CMAKE_CURRENT_BINARY_DIR}/Core)
