@@ -252,10 +252,10 @@ namespace Strawberry::Window
 		auto GetModifier = [](int modifier)
 		{
 			Input::Modifiers result = 0;
-			if (modifier & GLFW_MOD_SHIFT) result = result | (Input::Modifiers) Input::Modifier::SHIFT;
-			if (modifier & GLFW_MOD_CONTROL) result = result | (Input::Modifiers) Input::Modifier::CTRL;
-			if (modifier & GLFW_MOD_ALT) result = result | (Input::Modifiers) Input::Modifier::ALT;
-			if (modifier & GLFW_MOD_SUPER) result = result | (Input::Modifiers) Input::Modifier::META;
+			if (modifier & GLFW_MOD_SHIFT)   result = result | static_cast<Input::Modifiers>(Input::Modifier::SHIFT);
+			if (modifier & GLFW_MOD_CONTROL) result = result | static_cast<Input::Modifiers>(Input::Modifier::CTRL);
+			if (modifier & GLFW_MOD_ALT)     result = result | static_cast<Input::Modifiers>(Input::Modifier::ALT);
+			if (modifier & GLFW_MOD_SUPER)   result = result | static_cast<Input::Modifiers>(Input::Modifier::META);
 			return result;
 		};
 
