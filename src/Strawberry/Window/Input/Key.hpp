@@ -15,6 +15,7 @@ namespace Strawberry::Window::Input
 	enum class KeyCode
 	{
 		Unknown,
+		SPACE,
 		A,
 		B,
 		C,

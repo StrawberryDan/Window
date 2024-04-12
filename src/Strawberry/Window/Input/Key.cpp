@@ -14,6 +14,7 @@ namespace Strawberry::Window::Input
 	{
 		static const std::map<int, KeyCode> sMapping
 			{
+				{GLFW_KEY_SPACE,         KeyCode::SPACE},
 				{GLFW_KEY_A,             KeyCode::A},
 				{GLFW_KEY_B,             KeyCode::B},
 				{GLFW_KEY_C,             KeyCode::C},
