@@ -69,6 +69,9 @@ namespace Strawberry::Window
 		T Create(const Args&... args) { return T(*this, std::forward<const Args&>(args)...); }
 
 
+		bool HasFocus() const noexcept;
+
+
 		const std::string& GetTitle() const;
 		void SetTitle(const std::string& title);
 
@@ -81,10 +84,12 @@ namespace Strawberry::Window
 		static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);
 		static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
 		static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
+		static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
 
 
 	private:
 		GLFWwindow* mHandle;
+		bool              mHasFocus = true;
 		std::deque<Event> mEventQueue;
 
 		Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;

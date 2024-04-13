@@ -42,11 +42,18 @@ namespace Strawberry::Window
 			Input::KeyAction action;
 			Core::Math::Vec2f position;
 		};
+
+
+		struct Focus
+		{
+			bool focussed;
+		};
 	}
 
 
 	using Event = Core::Variant<Events::Key,
 								Events::Text,
 								Events::MouseMove,
-								Events::MouseButton>;
+								Events::MouseButton,
+								Events::Focus>;
 }

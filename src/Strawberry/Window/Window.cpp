@@ -45,6 +45,7 @@ namespace Strawberry::Window
 		glfwSetCharCallback(mHandle, &Window::OnTextEvent);
 		glfwSetCursorPosCallback(mHandle, &Window::OnMouseMove);
 		glfwSetMouseButtonCallback(mHandle, &Window::OnMouseButton);
+		glfwSetWindowFocusCallback(mHandle, &Window::OnWindowFocusChange);
 
 		sInstanceMap.Lock()->emplace(mHandle, this);
 	}
@@ -118,6 +119,12 @@ namespace Strawberry::Window
 		Core::Math::Vec2i size;
 		glfwGetWindowSize(mHandle, &size[0], &size[1]);
 		return size;
+	}
+
+
+	bool Window::HasFocus() const noexcept
+	{
+		return mHasFocus;
 	}
 
 
@@ -272,6 +279,14 @@ namespace Strawberry::Window
 		};
 
 		window->mEventQueue.emplace_back(event);
+	}
+
+
+	void Window::OnWindowFocusChange(GLFWwindow* windowHandle, int focus)
+	{
+		Window* window = sInstanceMap.Lock()->at(windowHandle);
+		window->mHasFocus = focus == GLFW_TRUE;
+		window->mEventQueue.emplace_back(Events::Focus{.focussed = window->HasFocus()});
 	}
 
 
