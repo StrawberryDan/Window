@@ -51,8 +51,8 @@ namespace Strawberry::Window
 		//  Construction, Destruction and Assignment
 		//----------------------------------------------------------------------------------------------------------------------
 		Window(const std::string& title, Core::Math::Vec2i size);
-		Window(const Window& rhs) = default;
-		Window& operator=(const Window& rhs) = default;
+		Window(const Window& rhs) = delete;
+		Window& operator=(const Window& rhs) = delete;
 		Window(Window&& rhs) noexcept;
 		Window& operator=(Window&& rhs) noexcept;
 		~Window();
