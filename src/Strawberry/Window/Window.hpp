@@ -88,13 +88,13 @@ namespace Strawberry::Window
 
 
 	private:
-		GLFWwindow* mHandle;
-		bool              mHasFocus = true;
-		std::deque<Event> mEventQueue;
+		GLFWwindow*                       mHandle;
+		bool                              mHasFocus = true;
+		std::deque<Event>                 mEventQueue;
 
 		Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;
 
-		std::string mTitle;
+		std::string                       mTitle;
 	};
 
 
