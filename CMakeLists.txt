@@ -34,12 +34,12 @@ if (NOT TARGET StrawberryWindow)
         src/Strawberry/Window/Window.hpp)
     target_include_directories(StrawberryWindow PUBLIC src)
     target_link_libraries(StrawberryWindow PUBLIC StrawberryCore glfw)
-    set_target_properties(StrawberryWindow PROPERTIES CXX_STANDARD 20)
+    set_target_properties(StrawberryWindow PROPERTIES CXX_STANDARD 23)
 
 
 
     add_executable(StrawberryWindowTest
         test/Main.cpp)
     target_link_libraries(StrawberryWindowTest PUBLIC StrawberryWindow)
-    set_target_properties(StrawberryWindowTest PROPERTIES CXX_STANDARD 20)
+    set_target_properties(StrawberryWindowTest PROPERTIES CXX_STANDARD 23)
 endif()
