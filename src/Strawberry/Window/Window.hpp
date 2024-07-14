@@ -39,65 +39,65 @@ namespace Strawberry::Window
 	{
 		friend class Vulkan::Surface;
 
-		private:
-			static void Initialise();
-			static void Terminate();
+	private:
+		static void Initialise();
+		static void Terminate();
 
 
-			static std::atomic<unsigned int>                   sInstanceCount;
-			static Core::Mutex<std::map<GLFWwindow*, Window*>> sInstanceMap;
+		static std::atomic<unsigned int>                   sInstanceCount;
+		static Core::Mutex<std::map<GLFWwindow*, Window*>> sInstanceMap;
 
-		public:
-			//======================================================================================================================
-			//  Construction, Destruction and Assignment
-			//----------------------------------------------------------------------------------------------------------------------
-			Window(const std::string& title, Core::Math::Vec2i size);
-			Window(const Window& rhs)            = delete;
-			Window& operator=(const Window& rhs) = delete;
-			Window(Window&& rhs) noexcept;
-			Window& operator=(Window&& rhs) noexcept;
-			~Window();
+	public:
+		//======================================================================================================================
+		//  Construction, Destruction and Assignment
+		//----------------------------------------------------------------------------------------------------------------------
+		Window(const std::string& title, Core::Math::Vec2i size);
+		Window(const Window& rhs)            = delete;
+		Window& operator=(const Window& rhs) = delete;
+		Window(Window&& rhs) noexcept;
+		Window& operator=(Window&& rhs) noexcept;
+		~Window();
 
-			Core::Optional<Event> NextEvent();
+		Core::Optional<Event> NextEvent();
 
-			bool CloseRequested() const;
+		bool CloseRequested() const;
 
-			void SwapBuffers();
+		void SwapBuffers();
 
-			[[nodiscard]] Core::Math::Vec2i GetSize() const;
-
-
-			template<std::movable T, typename... Args> requires (std::constructible_from<T, const Window&, Args...>)
-			T Create(const Args&... args)
-			{
-				return T(*this, std::forward<const Args&>(args)...);
-			}
+		[[nodiscard]] Core::Math::Vec2i GetSize() const;
 
 
-			bool HasFocus() const noexcept;
+		template<std::movable T, typename... Args> requires (std::constructible_from<T, const Window&, Args...>)
+		T Create(const Args&... args)
+		{
+			return T(*this, std::forward<const Args&>(args)...);
+		}
 
 
-			const std::string& GetTitle() const;
-			void               SetTitle(const std::string& title);
+		bool HasFocus() const noexcept;
 
 
-			void SetIcon(const std::filesystem::path& iconFile);
+		const std::string& GetTitle() const;
+		void               SetTitle(const std::string& title);
 
-		private:
-			static void OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods);
-			static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);
-			static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
-			static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
-			static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
 
-		private:
-			GLFWwindow*       mHandle;
-			bool              mHasFocus = true;
-			std::deque<Event> mEventQueue;
+		void SetIcon(const std::filesystem::path& iconFile);
 
-			Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;
+	private:
+		static void OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods);
+		static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);
+		static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
+		static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
+		static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
 
-			std::string mTitle;
+	private:
+		GLFWwindow*       mHandle;
+		bool              mHasFocus = true;
+		std::deque<Event> mEventQueue;
+
+		Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;
+
+		std::string mTitle;
 	};
 
 
