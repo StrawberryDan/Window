@@ -17,16 +17,18 @@ namespace Strawberry::Window
 	{
 		struct Key
 		{
-			Input::KeyCode keyCode;
-			Input::ScanCode scanCode;
+			Input::KeyCode   keyCode;
+			Input::ScanCode  scanCode;
 			Input::Modifiers modifiers;
 			Input::KeyAction action;
 		};
+
 
 		struct Text
 		{
 			char32_t codepoint;
 		};
+
 
 		struct MouseMove
 		{
@@ -38,9 +40,9 @@ namespace Strawberry::Window
 		struct MouseButton
 		{
 			Input::MouseButton button;
-			Input::Modifiers modifiers;
-			Input::KeyAction action;
-			Core::Math::Vec2f position;
+			Input::Modifiers   modifiers;
+			Input::KeyAction   action;
+			Core::Math::Vec2f  position;
 		};
 
 
@@ -52,8 +54,8 @@ namespace Strawberry::Window
 
 
 	using Event = Core::Variant<Events::Key,
-								Events::Text,
-								Events::MouseMove,
-								Events::MouseButton,
-								Events::Focus>;
+	                            Events::Text,
+	                            Events::MouseMove,
+	                            Events::MouseButton,
+	                            Events::Focus>;
 }

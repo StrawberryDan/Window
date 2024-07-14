@@ -24,7 +24,10 @@
 //======================================================================================================================
 //  Foreward Declaration
 //----------------------------------------------------------------------------------------------------------------------
-namespace Strawberry::Vulkan { class Surface; }
+namespace Strawberry::Vulkan
+{
+	class Surface;
+}
 
 
 //======================================================================================================================
@@ -36,65 +39,65 @@ namespace Strawberry::Window
 	{
 		friend class Vulkan::Surface;
 
-
-	private:
-		static void Initialise();
-		static void Terminate();
-
-
-		static std::atomic<unsigned int> sInstanceCount;
-		static Core::Mutex<std::map<GLFWwindow*, Window*>> sInstanceMap;
+		private:
+			static void Initialise();
+			static void Terminate();
 
 
-	public:
-		//======================================================================================================================
-		//  Construction, Destruction and Assignment
-		//----------------------------------------------------------------------------------------------------------------------
-		Window(const std::string& title, Core::Math::Vec2i size);
-		Window(const Window& rhs) = delete;
-		Window& operator=(const Window& rhs) = delete;
-		Window(Window&& rhs) noexcept;
-		Window& operator=(Window&& rhs) noexcept;
-		~Window();
+			static std::atomic<unsigned int>                   sInstanceCount;
+			static Core::Mutex<std::map<GLFWwindow*, Window*>> sInstanceMap;
 
-		Core::Optional<Event> NextEvent();
+		public:
+			//======================================================================================================================
+			//  Construction, Destruction and Assignment
+			//----------------------------------------------------------------------------------------------------------------------
+			Window(const std::string& title, Core::Math::Vec2i size);
+			Window(const Window& rhs)            = delete;
+			Window& operator=(const Window& rhs) = delete;
+			Window(Window&& rhs) noexcept;
+			Window& operator=(Window&& rhs) noexcept;
+			~Window();
 
-		bool CloseRequested() const;
+			Core::Optional<Event> NextEvent();
 
-		void SwapBuffers();
+			bool CloseRequested() const;
 
-		[[nodiscard]] Core::Math::Vec2i GetSize() const;
+			void SwapBuffers();
 
-		template <std::movable T, typename... Args> requires (std::constructible_from<T, const Window&, Args...>)
-		T Create(const Args&... args) { return T(*this, std::forward<const Args&>(args)...); }
-
-
-		bool HasFocus() const noexcept;
+			[[nodiscard]] Core::Math::Vec2i GetSize() const;
 
 
-		const std::string& GetTitle() const;
-		void SetTitle(const std::string& title);
+			template<std::movable T, typename... Args> requires (std::constructible_from<T, const Window&, Args...>)
+			T Create(const Args&... args)
+			{
+				return T(*this, std::forward<const Args&>(args)...);
+			}
 
 
-		void SetIcon(const std::filesystem::path& iconFile);
+			bool HasFocus() const noexcept;
 
 
-	private:
-		static void OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods);
-		static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);
-		static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
-		static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
-		static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
+			const std::string& GetTitle() const;
+			void               SetTitle(const std::string& title);
 
 
-	private:
-		GLFWwindow*                       mHandle;
-		bool                              mHasFocus = true;
-		std::deque<Event>                 mEventQueue;
+			void SetIcon(const std::filesystem::path& iconFile);
 
-		Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;
+		private:
+			static void OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods);
+			static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);
+			static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
+			static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
+			static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
 
-		std::string                       mTitle;
+		private:
+			GLFWwindow*       mHandle;
+			bool              mHasFocus = true;
+			std::deque<Event> mEventQueue;
+
+			Core::Optional<Core::Math::Vec2f> mPreviousMousePosition;
+
+			std::string mTitle;
 	};
 
 

@@ -109,14 +109,14 @@ namespace Strawberry::Window::Input
 
 	class Modifier
 	{
-	public:
-		enum : Modifiers
-		{
-			CTRL = 1 << 0,
-			SHIFT = 1 << 1,
-			ALT = 1 << 2,
-			META = 1 << 3,
-		};
+		public:
+			enum : Modifiers
+			{
+				CTRL  = 1 << 0,
+				SHIFT = 1 << 1,
+				ALT   = 1 << 2,
+				META  = 1 << 3,
+			};
 	};
 
 
@@ -125,6 +125,8 @@ namespace Strawberry::Window::Input
 
 	enum class KeyAction
 	{
-		Press, Release, Repeat,
+		Press,
+		Release,
+		Repeat,
 	};
 }

@@ -187,12 +187,12 @@ namespace Strawberry::Window
 
 
 		Events::Key event
-			{
-				.keyCode = Input::IntoKeyCode(key).UnwrapOr(Input::KeyCode::Unknown),
-				.scanCode = scancode,
-				.modifiers = GetModifier(mods),
-				.action = GetAction(action),
-			};
+		{
+			.keyCode = Input::IntoKeyCode(key).UnwrapOr(Input::KeyCode::Unknown),
+			.scanCode = scancode,
+			.modifiers = GetModifier(mods),
+			.action = GetAction(action),
+		};
 
 		window->mEventQueue.emplace_back(event);
 	}
@@ -203,7 +203,7 @@ namespace Strawberry::Window
 		Window* window = sInstanceMap.Lock()->at(windowHandle);
 
 		Events::Text event
-			{.codepoint = codepoint};
+				{.codepoint = codepoint};
 
 		window->mEventQueue.emplace_back(event);
 	}
@@ -215,11 +215,14 @@ namespace Strawberry::Window
 
 		Core::Math::Vec2f newPos(x, y);
 
-		Events::MouseMove event {
+		Events::MouseMove event{
 			.position = Core::Math::Vec2f(x, y),
 			.deltaPosition = window->mPreviousMousePosition
-				.Map([=](const auto& prev) { return newPos - prev; })
-				.UnwrapOr(Core::Math::Vec2u()),
+			                       .Map([=](const auto& prev)
+			                       {
+				                       return newPos - prev;
+			                       })
+			                       .UnwrapOr(Core::Math::Vec2u()),
 		};
 
 		window->mEventQueue.emplace_back(event);
@@ -234,10 +237,14 @@ namespace Strawberry::Window
 		{
 			switch (code)
 			{
-				case GLFW_MOUSE_BUTTON_LEFT: return Input::MouseButton::Left;
-				case GLFW_MOUSE_BUTTON_RIGHT: return Input::MouseButton::Right;
-				case GLFW_MOUSE_BUTTON_MIDDLE: return Input::MouseButton::Middle;
-				default: Core::Unreachable();
+				case GLFW_MOUSE_BUTTON_LEFT:
+					return Input::MouseButton::Left;
+				case GLFW_MOUSE_BUTTON_RIGHT:
+					return Input::MouseButton::Right;
+				case GLFW_MOUSE_BUTTON_MIDDLE:
+					return Input::MouseButton::Middle;
+				default:
+					Core::Unreachable();
 			}
 		};
 
@@ -259,10 +266,10 @@ namespace Strawberry::Window
 		auto GetModifier = [](int modifier)
 		{
 			Input::Modifiers result = 0;
-			if (modifier & GLFW_MOD_SHIFT)   result = result | static_cast<Input::Modifiers>(Input::Modifier::SHIFT);
+			if (modifier & GLFW_MOD_SHIFT) result = result | static_cast<Input::Modifiers>(Input::Modifier::SHIFT);
 			if (modifier & GLFW_MOD_CONTROL) result = result | static_cast<Input::Modifiers>(Input::Modifier::CTRL);
-			if (modifier & GLFW_MOD_ALT)     result = result | static_cast<Input::Modifiers>(Input::Modifier::ALT);
-			if (modifier & GLFW_MOD_SUPER)   result = result | static_cast<Input::Modifiers>(Input::Modifier::META);
+			if (modifier & GLFW_MOD_ALT) result = result | static_cast<Input::Modifiers>(Input::Modifier::ALT);
+			if (modifier & GLFW_MOD_SUPER) result = result | static_cast<Input::Modifiers>(Input::Modifier::META);
 			return result;
 		};
 
@@ -271,7 +278,7 @@ namespace Strawberry::Window
 		glfwGetCursorPos(windowHandle, &position[0], &position[1]);
 
 
-		Events::MouseButton event {
+		Events::MouseButton event{
 			.button = GetButton(button),
 			.modifiers = GetModifier(mods),
 			.action = GetAction(action),
@@ -284,7 +291,7 @@ namespace Strawberry::Window
 
 	void Window::OnWindowFocusChange(GLFWwindow* windowHandle, int focus)
 	{
-		Window* window = sInstanceMap.Lock()->at(windowHandle);
+		Window* window    = sInstanceMap.Lock()->at(windowHandle);
 		window->mHasFocus = focus == GLFW_TRUE;
 		window->mEventQueue.emplace_back(Events::Focus{.focussed = window->HasFocus()});
 	}
