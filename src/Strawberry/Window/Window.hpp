@@ -91,7 +91,7 @@ namespace Strawberry::Window
 		static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
 
 	private:
-		GLFWwindow*       mHandle;
+		GLFWwindow*       mHandle = nullptr;
 		bool              mHasFocus = true;
 		std::deque<Event> mEventQueue;
 
