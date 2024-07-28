@@ -13,9 +13,7 @@ endif ()
 
 
 if (NOT TARGET StrawberryWindow)
-	if (NOT TARGET StrawberryCore AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../Core)
-		add_subdirectory(../Core ${CMAKE_CURRENT_BINARY_DIR}/Core)
-	endif ()
+	find_strawberry_library(NAME Core)
 
 
 	FetchContent_Declare(GLFW
@@ -25,13 +23,16 @@ if (NOT TARGET StrawberryWindow)
 	FetchContent_MakeAvailable(GLFW)
 
 
-	add_library(StrawberryWindow STATIC
+	list(APPEND StrawberryWindow_Sources
 		src/Strawberry/Window/Input/Key.cpp
 		src/Strawberry/Window/Input/Key.hpp
 		src/Strawberry/Window/Input/Mouse.hpp
 		src/Strawberry/Window/Event.hpp
 		src/Strawberry/Window/Window.cpp
 		src/Strawberry/Window/Window.hpp)
+
+
+	new_strawberry_library(NAME StrawberryWindow SOURCE ${StrawberryWindow_Sources})
 	target_include_directories(StrawberryWindow PUBLIC src)
 	target_link_libraries(StrawberryWindow PUBLIC StrawberryCore glfw)
 	set_target_properties(StrawberryWindow PROPERTIES CXX_STANDARD 23)
