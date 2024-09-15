@@ -33,7 +33,7 @@ namespace Strawberry::Window
 	Window::Window(const std::string& title, Core::Math::Vec2i size)
 		: mTitle(title)
 	{
-		if (sInstanceCount++ == 0) Initialise();
+		if (sInstanceCount++ == 0) [[unlikely]] Initialise();
 
 		Core::Assert(size[0] > 0 && size[1] > 0);
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -82,7 +82,7 @@ namespace Strawberry::Window
 			sInstanceMap.Lock()->erase(mHandle);
 		}
 
-		if (--sInstanceCount == 0) Terminate();
+		if (sInstanceCount == 0) [[unlikely]] Terminate();
 	}
 
 
@@ -92,12 +92,10 @@ namespace Strawberry::Window
 		{
 			return {};
 		}
-		else
-		{
-			auto event(mEventQueue.front());
-			mEventQueue.pop_front();
-			return event;
-		}
+
+		auto event(mEventQueue.front());
+		mEventQueue.pop_front();
+		return event;
 	}
 
 
