@@ -216,11 +216,11 @@ namespace Strawberry::Window
 		Events::MouseMove event{
 			.position = Core::Math::Vec2f(x, y),
 			.deltaPosition = window->mPreviousMousePosition
-			                       .Map([=](const auto& prev)
+			                       .Map([=](const auto& prev) -> Core::Math::Vec2f
 			                       {
 				                       return newPos - prev;
 			                       })
-			                       .UnwrapOr(Core::Math::Vec2u()),
+			                       .UnwrapOr(Core::Math::Vec2f()),
 		};
 
 		window->mEventQueue.emplace_back(event);
