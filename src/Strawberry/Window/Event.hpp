@@ -8,7 +8,6 @@
 // Strawberry Core
 #include "Strawberry/Core/Types/Variant.hpp"
 #include "Strawberry/Core/Math/Vector.hpp"
-#include "Strawberry/Core/Timing/Clock.hpp"
 
 
 namespace Strawberry::Window
