@@ -223,6 +223,8 @@ namespace Strawberry::Window
 			                       .UnwrapOr(Core::Math::Vec2f()),
 		};
 
+		window->mPreviousMousePosition = event.position;
+
 		window->mEventQueue.emplace_back(event);
 	}
 
