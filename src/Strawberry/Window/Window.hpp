@@ -83,6 +83,9 @@ namespace Strawberry::Window
 
 		void SetIcon(const std::filesystem::path& iconFile);
 
+		void SetCursorEnabled(bool enabled);
+		void SetRawMouseInputEnabled(bool enabled);
+
 	private:
 		static void OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods);
 		static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);

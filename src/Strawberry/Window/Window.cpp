@@ -153,6 +153,15 @@ namespace Strawberry::Window
 		glfwSetWindowIcon(mHandle, 1, &glfwImage);
 	}
 
+	void Window::SetCursorEnabled(bool enabled)
+	{
+		glfwSetInputMode(mHandle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+	}
+
+	void Window::SetRawMouseInputEnabled(bool enabled)
+	{
+		glfwSetInputMode(mHandle, GLFW_RAW_MOUSE_MOTION, enabled ? GLFW_TRUE : GLFW_FALSE);
+	}
 
 	void Window::OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods)
 	{
