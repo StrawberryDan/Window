@@ -126,7 +126,8 @@ namespace Strawberry::Window::Input
 	enum class KeyAction
 	{
 		Press,
-		Release,
+		Hold,
 		Repeat,
+		Release,
 	};
 }

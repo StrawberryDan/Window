@@ -306,8 +306,68 @@ namespace Strawberry::Window
 	}
 
 
+	Input::Modifiers Window::GetCurrentModifierFlags() const
+	{
+		Input::Modifiers modifiers = 0;
+
+		if (glfwGetKey(mHandle, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS
+			|| glfwGetKey(mHandle, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS)
+		{
+			modifiers = modifiers | Input::Modifier::CTRL;
+		}
+
+		if (glfwGetKey(mHandle, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS
+			|| glfwGetKey(mHandle, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS)
+		{
+			modifiers = modifiers | Input::Modifier::SHIFT;
+		}
+
+		if (glfwGetKey(mHandle, GLFW_KEY_LEFT_ALT) == GLFW_PRESS
+			|| glfwGetKey(mHandle, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
+		{
+			modifiers = modifiers | Input::Modifier::ALT;
+		}
+
+		if (glfwGetKey(mHandle, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS
+			|| glfwGetKey(mHandle, GLFW_KEY_LEFT_SUPER) == GLFW_PRESS)
+		{
+			modifiers = modifiers | Input::Modifier::META;
+		}
+
+		return modifiers;
+	}
+
+
 	void PollInput()
 	{
 		glfwPollEvents();
+
+
+		// Insert a hold event for every key that is currently held down.
+		for (auto&& window : *Window::sInstanceMap.Lock())
+		{
+			const Input::Modifiers modifiers = window.second->GetCurrentModifierFlags();
+			for (int i = 0; i < GLFW_KEY_LAST; i++)
+			{
+				auto keycode = Input::IntoKeyCode(i);
+				if (!keycode) continue;
+
+				auto scanCode = glfwGetKeyScancode(i);
+				if (scanCode == -1) continue;
+
+				if (glfwGetKey(window.second->mHandle, i) == GLFW_PRESS)
+				{
+					Events::Key holdEvent
+					{
+						.keyCode = keycode.Value(),
+						.scanCode = scanCode,
+						.modifiers = modifiers,
+						.action = Input::KeyAction::Hold
+					};
+
+					window.second->mEventQueue.emplace_back(holdEvent);
+				}
+			}
+		}
 	}
 }

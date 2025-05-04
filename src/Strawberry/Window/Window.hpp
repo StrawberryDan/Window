@@ -38,6 +38,7 @@ namespace Strawberry::Window
 	class Window
 	{
 		friend class Vulkan::Surface;
+		friend void PollInput();
 
 	private:
 		static void Initialise();
@@ -92,6 +93,10 @@ namespace Strawberry::Window
 		static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
 		static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
 		static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
+
+
+		Input::Modifiers GetCurrentModifierFlags() const;
+
 
 	private:
 		GLFWwindow*       mHandle = nullptr;
