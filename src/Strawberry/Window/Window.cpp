@@ -33,6 +33,8 @@ namespace Strawberry::Window
 	Window::Window(const std::string& title, Core::Math::Vec2i size)
 		: mTitle(title)
 	{
+		ZoneScoped;
+
 		if (sInstanceCount++ == 0) [[unlikely]] Initialise();
 
 		Core::Assert(size[0] > 0 && size[1] > 0);
@@ -74,6 +76,8 @@ namespace Strawberry::Window
 
 	Window::~Window()
 	{
+		ZoneScoped;
+
 		Core::Assert(sInstanceCount > 0);
 
 		if (mHandle)
@@ -88,6 +92,8 @@ namespace Strawberry::Window
 
 	Core::Optional<Event> Window::NextEvent()
 	{
+		ZoneScoped;
+
 		if (mEventQueue.empty())
 		{
 			return {};
@@ -101,12 +107,16 @@ namespace Strawberry::Window
 
 	bool Window::CloseRequested() const
 	{
+		ZoneScoped;
+
 		return glfwWindowShouldClose(mHandle);
 	}
 
 
 	void Window::SwapBuffers()
 	{
+		ZoneScoped;
+
 		glfwSwapInterval(1);
 		glfwSwapBuffers(mHandle);
 	}
@@ -141,6 +151,8 @@ namespace Strawberry::Window
 
 	void Window::SetIcon(const std::filesystem::path& iconFile)
 	{
+		ZoneScoped;
+
 		auto [size, channels, data] = Core::IO::DynamicByteBuffer::FromImage(iconFile).Unwrap();
 
 		const GLFWimage glfwImage
@@ -155,16 +167,22 @@ namespace Strawberry::Window
 
 	void Window::SetCursorEnabled(bool enabled)
 	{
+		ZoneScoped;
+
 		glfwSetInputMode(mHandle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 	}
 
 	void Window::SetRawMouseInputEnabled(bool enabled)
 	{
+		ZoneScoped;
+
 		glfwSetInputMode(mHandle, GLFW_RAW_MOUSE_MOTION, enabled ? GLFW_TRUE : GLFW_FALSE);
 	}
 
 	void Window::OnKeyEvent(GLFWwindow* windowHandle, int key, int scancode, int action, int mods)
 	{
+		ZoneScoped;
+
 		Window* window = sInstanceMap.Lock()->at(windowHandle);
 
 		auto GetAction = [](int action)
@@ -207,10 +225,11 @@ namespace Strawberry::Window
 
 	void Window::OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint)
 	{
+		ZoneScoped;
+
 		Window* window = sInstanceMap.Lock()->at(windowHandle);
 
-		Events::Text event
-				{.codepoint = codepoint};
+		Events::Text event {.codepoint = static_cast<char32_t>(codepoint)};
 
 		window->mEventQueue.emplace_back(event);
 	}
@@ -218,6 +237,8 @@ namespace Strawberry::Window
 
 	void Window::OnMouseMove(GLFWwindow* windowHandle, double x, double y)
 	{
+		ZoneScoped;
+
 		Window* window = sInstanceMap.Lock()->at(windowHandle);
 
 		Core::Math::Vec2f newPos(x, y);
@@ -240,6 +261,8 @@ namespace Strawberry::Window
 
 	void Window::OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods)
 	{
+		ZoneScoped;
+
 		Window* window = sInstanceMap.Lock()->at(windowHandle);
 
 		auto GetButton = [](int code)
@@ -300,6 +323,8 @@ namespace Strawberry::Window
 
 	void Window::OnWindowFocusChange(GLFWwindow* windowHandle, int focus)
 	{
+		ZoneScoped;
+
 		Window* window    = sInstanceMap.Lock()->at(windowHandle);
 		window->mHasFocus = focus == GLFW_TRUE;
 		window->mEventQueue.emplace_back(Events::Focus{.focussed = window->HasFocus()});
@@ -308,6 +333,8 @@ namespace Strawberry::Window
 
 	Input::Modifiers Window::GetCurrentModifierFlags() const
 	{
+		ZoneScoped;
+
 		Input::Modifiers modifiers = 0;
 
 		if (glfwGetKey(mHandle, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS
@@ -340,6 +367,8 @@ namespace Strawberry::Window
 
 	void PollInput()
 	{
+		ZoneScoped;
+
 		glfwPollEvents();
 
 
