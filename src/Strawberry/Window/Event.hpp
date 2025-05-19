@@ -45,6 +45,12 @@ namespace Strawberry::Window
 		};
 
 
+		struct MouseScroll
+		{
+			Core::Math::Vec2f scroll;
+		};
+
+
 		struct Focus
 		{
 			bool focussed;
@@ -52,9 +58,11 @@ namespace Strawberry::Window
 	}
 
 
-	using Event = Core::Variant<Events::Key,
-	                            Events::Text,
-	                            Events::MouseMove,
-	                            Events::MouseButton,
-	                            Events::Focus>;
+	using Event = Core::Variant<
+		Events::Key,
+		Events::Text,
+		Events::MouseMove,
+		Events::MouseButton,
+		Events::MouseScroll,
+		Events::Focus>;
 }

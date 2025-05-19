@@ -92,6 +92,7 @@ namespace Strawberry::Window
 		static void OnTextEvent(GLFWwindow* windowHandle, unsigned int codepoint);
 		static void OnMouseMove(GLFWwindow* windowHandle, double x, double y);
 		static void OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods);
+		static void OnMouseScroll(GLFWwindow* windowHandle, double xOffset, double yOffset);
 		static void OnWindowFocusChange(GLFWwindow* windowHandle, int focus);
 
 

@@ -48,6 +48,7 @@ namespace Strawberry::Window
 		glfwSetCursorPosCallback(mHandle, &Window::OnMouseMove);
 		glfwSetMouseButtonCallback(mHandle, &Window::OnMouseButton);
 		glfwSetWindowFocusCallback(mHandle, &Window::OnWindowFocusChange);
+		glfwSetScrollCallback(mHandle, &Window::OnMouseScroll);
 
 		sInstanceMap.Lock()->emplace(mHandle, this);
 	}
@@ -315,6 +316,21 @@ namespace Strawberry::Window
 			.modifiers = GetModifier(mods),
 			.action = GetAction(action),
 			.position = position.AsType<float>()
+		};
+
+		window->mEventQueue.emplace_back(event);
+	}
+
+
+	void Window::OnMouseScroll(GLFWwindow* windowHandle, double xOffset, double yOffset)
+	{
+		ZoneScoped;
+
+		Window* window = sInstanceMap.Lock()->at(windowHandle);
+
+		Events::MouseScroll event
+		{
+			.scroll = {xOffset, yOffset},
 		};
 
 		window->mEventQueue.emplace_back(event);
