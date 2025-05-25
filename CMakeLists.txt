@@ -24,10 +24,12 @@ if (NOT TARGET StrawberryWindow)
 
 
 	list(APPEND StrawberryWindow_Sources
+		src/Strawberry/Window/Event.hpp
 		src/Strawberry/Window/Input/Key.cpp
 		src/Strawberry/Window/Input/Key.hpp
 		src/Strawberry/Window/Input/Mouse.hpp
-		src/Strawberry/Window/Event.hpp
+		src/Strawberry/Window/Monitor.cpp
+		src/Strawberry/Window/Monitor.hpp
 		src/Strawberry/Window/Window.cpp
 		src/Strawberry/Window/Window.hpp)
 
