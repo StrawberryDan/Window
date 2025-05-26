@@ -1,9 +1,9 @@
 #include "Monitor.hpp"
-
-#include <ranges>
-
-
+#include "GLFW.hpp"
+// GLFW 3
 #include "GLFW/glfw3.h"
+// Standard :Librarry
+#include <ranges>
 
 
 namespace Strawberry::Window
@@ -15,8 +15,11 @@ namespace Strawberry::Window
 		return mResolution.AsType<float>() / sizeInInches;
 	}
 
+
 	std::vector<MonitorInfo> GetMonitorInfo()
 	{
+		GLFWUser libraryUser;
+
 		int monitorCount = 0;
 		GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
 
