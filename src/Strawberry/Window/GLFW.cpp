@@ -43,6 +43,16 @@ namespace Strawberry::Window
 	}
 
 
+	GLFWUser::GLFWUser(const GLFWUser&) noexcept
+		: GLFWUser()
+	{}
+
+
+	GLFWUser::GLFWUser(GLFWUser&&) noexcept
+		: GLFWUser()
+	{}
+
+
 	GLFWUser::~GLFWUser()
 	{
 		if (sInstanceCount.fetch_sub(1) == 1) [[unlikely]]

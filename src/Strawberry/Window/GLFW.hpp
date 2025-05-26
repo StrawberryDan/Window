@@ -21,6 +21,8 @@ namespace Strawberry::Window
 	{
 	public:
 		GLFWUser();
+		GLFWUser(const GLFWUser&) noexcept;
+		GLFWUser(GLFWUser&&) noexcept;
 		~GLFWUser();
 
 	private:
