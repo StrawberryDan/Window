@@ -11,32 +11,12 @@
 
 namespace Strawberry::Window
 {
-	void Window::Initialise()
-	{
-		Core::Assert(glfwInit() == GLFW_TRUE);
-		Core::Assert(glfwVulkanSupported());
-	}
-
-
-	void Window::Terminate()
-	{
-		glfwTerminate();
-	}
-
-
-	std::atomic<unsigned int> Window::sInstanceCount = 0;
-
-
 	Core::Mutex<std::map<GLFWwindow*, Window*>> Window::sInstanceMap;
 
 
 	Window::Window(const std::string& title, Core::Math::Vec2i size)
 		: mTitle(title)
-	{
-		ZoneScoped;
-
-		if (sInstanceCount++ == 0) [[unlikely]] Initialise();
-
+	{	ZoneScoped;
 		Core::Assert(size[0] > 0 && size[1] > 0);
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #ifdef _WIN32
@@ -76,18 +56,12 @@ namespace Strawberry::Window
 
 
 	Window::~Window()
-	{
-		ZoneScoped;
-
-		Core::Assert(sInstanceCount > 0);
-
+	{	ZoneScoped;
 		if (mHandle)
 		{
 			glfwDestroyWindow(mHandle);
 			sInstanceMap.Lock()->erase(mHandle);
 		}
-
-		if (sInstanceCount == 0) [[unlikely]] Terminate();
 	}
 
 

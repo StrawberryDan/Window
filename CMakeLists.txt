@@ -25,6 +25,8 @@ if (NOT TARGET StrawberryWindow)
 
 	list(APPEND StrawberryWindow_Sources
 		src/Strawberry/Window/Event.hpp
+		src/Strawberry/Window/GLFW.cpp
+		src/Strawberry/Window/GLFW.hpp
 		src/Strawberry/Window/Input/Key.cpp
 		src/Strawberry/Window/Input/Key.hpp
 		src/Strawberry/Window/Input/Mouse.hpp

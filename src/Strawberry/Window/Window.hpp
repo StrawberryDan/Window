@@ -4,6 +4,7 @@
 //======================================================================================================================
 //  Includes
 //----------------------------------------------------------------------------------------------------------------------
+#include "GLFW.hpp"
 // Strawberry Graphics
 #include "Strawberry/Window/Event.hpp"
 // Strawberry Core
@@ -36,17 +37,14 @@ namespace Strawberry::Vulkan
 namespace Strawberry::Window
 {
 	class Window
+		: public GLFWUser
 	{
 		friend class Vulkan::Surface;
 		friend void PollInput();
 
-	private:
-		static void Initialise();
-		static void Terminate();
 
-
-		static std::atomic<unsigned int>                   sInstanceCount;
 		static Core::Mutex<std::map<GLFWwindow*, Window*>> sInstanceMap;
+
 
 	public:
 		//======================================================================================================================
