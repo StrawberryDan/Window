@@ -36,7 +36,7 @@ namespace Strawberry::Window
 
 	GLFWUser::GLFWUser()
 	{
-		if (sInstanceCount.fetch_add(1) == 0)
+		if (sInstanceCount.fetch_add(1) == 0) [[unlikely]]
 		{
 			GLFWLibrary::Initialise();
 		}
@@ -45,7 +45,7 @@ namespace Strawberry::Window
 
 	GLFWUser::~GLFWUser()
 	{
-		if (sInstanceCount.fetch_sub(1) == 1)
+		if (sInstanceCount.fetch_sub(1) == 1) [[unlikely]]
 		{
 			GLFWLibrary::Terminate();
 		}
