@@ -1,6 +1,9 @@
 #pragma once
 
 
+#include <atomic>
+
+
 namespace Strawberry::Window
 {
 	class GLFWLibrary
