@@ -19,7 +19,7 @@ if (NOT TARGET StrawberryWindow)
 	FetchContent_Declare(GLFW
 		EXCLUDE_FROM_ALL
 		GIT_REPOSITORY "https://github.com/glfw/glfw.git"
-		GIT_TAG "3.3.8")
+		GIT_TAG "3.4")
 	FetchContent_MakeAvailable(GLFW)
 
 
