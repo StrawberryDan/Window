@@ -14,6 +14,8 @@ namespace Strawberry::Window
 		static void Initialise() noexcept;
 		static void Terminate() noexcept;
 		static bool sIsInitialised;
+
+		static void ErrorCallback(int, const char*);
 	};
 
 

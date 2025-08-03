@@ -23,6 +23,7 @@ namespace Strawberry::Window
 		Core::Assert(glfwInit() == GLFW_TRUE);
 		Core::Assert(glfwVulkanSupported());
 		GLFWLibrary::sIsInitialised = true;
+		glfwSetErrorCallback(&ErrorCallback);
 	}
 
 
@@ -31,6 +32,12 @@ namespace Strawberry::Window
 		Core::Assert(sIsInitialised);
 		sIsInitialised = false;
 		glfwTerminate();
+	}
+
+
+	void GLFWLibrary::ErrorCallback(int code, const char* message)
+	{
+		Core::Logging::Warning("GLFW_ERROR\tCode: {}\tmessage: {}", code, message);
 	}
 
 
