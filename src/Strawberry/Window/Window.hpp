@@ -61,8 +61,6 @@ namespace Strawberry::Window
 
 		bool CloseRequested() const;
 
-		void SwapBuffers();
-
 		[[nodiscard]] Core::Math::Vec2i GetSize() const;
 
 

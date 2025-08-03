@@ -88,15 +88,6 @@ namespace Strawberry::Window
 	}
 
 
-	void Window::SwapBuffers()
-	{
-		ZoneScoped;
-
-		glfwSwapInterval(1);
-		glfwSwapBuffers(mHandle);
-	}
-
-
 	Core::Math::Vec2i Window::GetSize() const
 	{
 		Core::Math::Vec2i size;
