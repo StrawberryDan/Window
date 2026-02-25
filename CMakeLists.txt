@@ -39,11 +39,8 @@ if (NOT TARGET StrawberryWindow)
 	new_strawberry_library(NAME StrawberryWindow SOURCE ${StrawberryWindow_Sources})
 	target_include_directories(StrawberryWindow PUBLIC src)
 	target_link_libraries(StrawberryWindow PUBLIC StrawberryCore glfw)
-	set_target_properties(StrawberryWindow PROPERTIES CXX_STANDARD 23)
 
 
-	add_executable(StrawberryWindowTest
-		test/Main.cpp)
-	target_link_libraries(StrawberryWindowTest PUBLIC StrawberryWindow)
-	set_target_properties(StrawberryWindowTest PROPERTIES CXX_STANDARD 23)
+	new_strawberry_tests(NAME "StrawberryWindow" TESTS
+		test/Window.cpp)
 endif ()

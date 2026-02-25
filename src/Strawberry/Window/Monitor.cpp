@@ -2,7 +2,10 @@
 #include "GLFW.hpp"
 // GLFW 3
 #include "GLFW/glfw3.h"
+// Strawberry Core
+#include "Strawberry/Core/Math/Vector.hpp"
 // Standard :Librarry
+#include <vector>
 #include <ranges>
 
 
@@ -12,7 +15,7 @@ namespace Strawberry::Window
 	{
 		Core::Math::Vec2f sizeInInches = mPhysicalSizeMM.Map([] (auto&& x) -> float { return 25.4f * x; });
 
-		return mResolution.AsType<float>() / sizeInInches;
+		return { mResolution[0] / sizeInInches[0], mResolution[1] / sizeInInches[1] };
 	}
 
 
