@@ -20,7 +20,7 @@ namespace Strawberry::Window
 	void GLFWLibrary::Initialise() noexcept
 	{
 		Core::Assert(!sIsInitialised);
-		Core::Assert(glfwInit() == GLFW_TRUE);
+		Core::AssertEQ(glfwInit(), GLFW_TRUE);
 		Core::Assert(glfwVulkanSupported());
 		GLFWLibrary::sIsInitialised = true;
 		glfwSetErrorCallback(&ErrorCallback);
