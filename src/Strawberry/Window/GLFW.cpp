@@ -21,8 +21,7 @@ namespace Strawberry::Window
 	{
 		Core::Assert(!sIsInitialised);
 		Core::AssertEQ(glfwInit(), GLFW_TRUE);
-		Core::Assert(glfwVulkanSupported());
-		GLFWLibrary::sIsInitialised = true;
+		sIsInitialised = true;
 		glfwSetErrorCallback(&ErrorCallback);
 	}
 
