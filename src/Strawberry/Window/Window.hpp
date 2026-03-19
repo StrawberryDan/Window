@@ -59,6 +59,8 @@ namespace Strawberry::Window
 
 		Core::Optional<Event> NextEvent();
 
+		Core::Math::Vec2f GetContentScale() const noexcept;
+
 		bool CloseRequested() const;
 
 		[[nodiscard]] Core::Math::Vec2i GetSize() const;

@@ -80,6 +80,14 @@ namespace Strawberry::Window
 	}
 
 
+	Core::Math::Vec2f Window::GetContentScale() const noexcept
+	{
+		Core::Math::Vec2f v;
+		glfwGetWindowContentScale(mHandle, &v[0], &v[1]);
+		return v;
+	}
+
+
 	bool Window::CloseRequested() const
 	{
 		ZoneScoped;
