@@ -5,6 +5,7 @@
 // Strawberry Core
 #include "Strawberry/Core/Assert.hpp"
 // GLFW3
+#include "Monitor.hpp"
 #include "GLFW/glfw3.h"
 #include "Strawberry/Core/IO/DynamicByteBuffer.hpp"
 
@@ -101,6 +102,26 @@ namespace Strawberry::Window
 		Core::Math::Vec2i size;
 		glfwGetWindowSize(mHandle, &size[0], &size[1]);
 		return size;
+	}
+
+
+	Core::Math::Vec2f Window::GetPhysicalSizeMM() const
+	{
+		int x, y;
+		glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(), &x, &y);
+		return {x, y};
+	}
+
+
+	Core::Math::Vec2f Window::GetPhysicalSizeInches() const
+	{
+		return 0.0393701 * GetPhysicalSizeMM();
+	}
+
+
+	Core::Math::Vec2f Window::GetDPI() const
+	{
+		return GetPhysicalSizeInches().Piecewise(std::divides{}, GetSize());
 	}
 
 
