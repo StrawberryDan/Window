@@ -121,7 +121,9 @@ namespace Strawberry::Window
 
 	Core::Math::Vec2f Window::GetDPI() const
 	{
-		return GetPhysicalSizeInches().Piecewise(std::divides{}, GetSize());
+		const auto physicalSize = GetPhysicalSizeInches();
+		const auto size = GetSize();
+		return physicalSize.Piecewise(std::divides{}, size);
 	}
 
 
