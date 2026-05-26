@@ -105,6 +105,14 @@ namespace Strawberry::Window
 	}
 
 
+	Core::Math::Vec2i Window::GetFramebufferSize() const
+	{
+		Core::Math::Vec2i framebufferSize;
+		glfwGetFramebufferSize(mHandle, &framebufferSize[0], &framebufferSize[1]);
+		return framebufferSize;
+	}
+
+
 	Core::Math::Vec2f Window::GetPhysicalSizeMM() const
 	{
 		int x, y;
