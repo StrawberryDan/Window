@@ -12,7 +12,8 @@
 
 namespace Strawberry::Window
 {
-	Core::Mutex<std::map<GLFWwindow*, Window*>> Window::sInstanceMap;
+	Core::Spinlock Window::sInstanceMapSpinLock;
+	std::map<GLFWwindow*, Window*> Window::sInstanceMap;
 
 
 	Window::Window(const std::string& title, Core::Math::Vec2i size)
@@ -31,7 +32,9 @@ namespace Strawberry::Window
 		glfwSetWindowFocusCallback(mHandle, &Window::OnWindowFocusChange);
 		glfwSetScrollCallback(mHandle, &Window::OnMouseScroll);
 
-		sInstanceMap.Lock()->emplace(mHandle, this);
+		sInstanceMapSpinLock.Lock();
+		sInstanceMap.emplace(mHandle, this);
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
@@ -40,7 +43,9 @@ namespace Strawberry::Window
 		, mEventQueue(std::move(rhs.mEventQueue))
 		, mPreviousMousePosition(std::move(rhs.mPreviousMousePosition))
 	{
-		sInstanceMap.Lock()->insert_or_assign(mHandle, this);
+		sInstanceMapSpinLock.Lock();
+		sInstanceMap.insert_or_assign(mHandle, this);
+		sInstanceMapSpinLock.Lock();
 	}
 
 
@@ -61,7 +66,9 @@ namespace Strawberry::Window
 		if (mHandle)
 		{
 			glfwDestroyWindow(mHandle);
-			sInstanceMap.Lock()->erase(mHandle);
+			sInstanceMapSpinLock.Lock();
+			sInstanceMap.erase(mHandle);
+			sInstanceMapSpinLock.Unlock();
 		}
 	}
 
@@ -188,8 +195,6 @@ namespace Strawberry::Window
 	{
 		ZoneScoped;
 
-		Window* window = sInstanceMap.Lock()->at(windowHandle);
-
 		auto GetAction = [](int action)
 		{
 			switch (action)
@@ -224,7 +229,10 @@ namespace Strawberry::Window
 			.action = GetAction(action),
 		};
 
+		sInstanceMapSpinLock.Lock();
+		Window* window = sInstanceMap.at(windowHandle);
 		window->mEventQueue.emplace_back(event);
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
@@ -232,11 +240,13 @@ namespace Strawberry::Window
 	{
 		ZoneScoped;
 
-		Window* window = sInstanceMap.Lock()->at(windowHandle);
-
 		Events::Text event {.codepoint = static_cast<char32_t>(codepoint)};
 
+
+		sInstanceMapSpinLock.Lock();
+		Window* window = sInstanceMap.at(windowHandle);
 		window->mEventQueue.emplace_back(event);
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
@@ -244,7 +254,8 @@ namespace Strawberry::Window
 	{
 		ZoneScoped;
 
-		Window* window = sInstanceMap.Lock()->at(windowHandle);
+		sInstanceMapSpinLock.Lock();
+		Window* window = sInstanceMap.at(windowHandle);
 
 		Core::Math::Vec2f newPos(x, y);
 
@@ -259,16 +270,14 @@ namespace Strawberry::Window
 		};
 
 		window->mPreviousMousePosition = event.position;
-
 		window->mEventQueue.emplace_back(event);
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
 	void Window::OnMouseButton(GLFWwindow* windowHandle, int button, int action, int mods)
 	{
 		ZoneScoped;
-
-		Window* window = sInstanceMap.Lock()->at(windowHandle);
 
 		auto GetButton = [](int code)
 		{
@@ -322,7 +331,10 @@ namespace Strawberry::Window
 			.position = position.AsType<float>()
 		};
 
+		sInstanceMapSpinLock.Lock();
+		Window* window = sInstanceMap.at(windowHandle);
 		window->mEventQueue.emplace_back(event);
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
@@ -330,14 +342,15 @@ namespace Strawberry::Window
 	{
 		ZoneScoped;
 
-		Window* window = sInstanceMap.Lock()->at(windowHandle);
-
 		Events::MouseScroll event
 		{
 			.scroll = {xOffset, yOffset},
 		};
 
+		sInstanceMapSpinLock.Lock();
+		Window* window = sInstanceMap.at(windowHandle);
 		window->mEventQueue.emplace_back(event);
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
@@ -345,9 +358,11 @@ namespace Strawberry::Window
 	{
 		ZoneScoped;
 
-		Window* window    = sInstanceMap.Lock()->at(windowHandle);
+		sInstanceMapSpinLock.Lock();
+		Window* window    = sInstanceMap.at(windowHandle);
 		window->mHasFocus = focus == GLFW_TRUE;
 		window->mEventQueue.emplace_back(Events::Focus{.focussed = window->HasFocus()});
+		sInstanceMapSpinLock.Unlock();
 	}
 
 
@@ -391,9 +406,9 @@ namespace Strawberry::Window
 
 		glfwPollEvents();
 
-
 		// Insert a hold event for every key that is currently held down.
-		for (auto&& window : *Window::sInstanceMap.Lock())
+		Window::sInstanceMapSpinLock.Lock();
+		for (auto&& window : Window::sInstanceMap)
 		{
 			const Input::Modifiers modifiers = window.second->GetCurrentModifierFlags();
 			for (int i = 0; i < GLFW_KEY_LAST; i++)
@@ -418,5 +433,6 @@ namespace Strawberry::Window
 				}
 			}
 		}
+		Window::sInstanceMapSpinLock.Unlock();
 	}
 }

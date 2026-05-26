@@ -9,8 +9,9 @@
 #include "Strawberry/Window/Event.hpp"
 // Strawberry Core
 #include "Strawberry/Core/Math/Vector.hpp"
-#include "Strawberry/Core/Types/Optional.hpp"
 #include "Strawberry/Core/Sync/Mutex.hpp"
+#include "Strawberry/Core/Sync/Spinlock.hpp"
+#include "Strawberry/Core/Types/Optional.hpp"
 // GLFW 3
 #include "GLFW/glfw3.h"
 // Standard Library
@@ -43,7 +44,8 @@ namespace Strawberry::Window
 		friend void PollInput();
 
 
-		static Core::Mutex<std::map<GLFWwindow*, Window*>> sInstanceMap;
+		static Core::Spinlock                 sInstanceMapSpinLock;
+		static std::map<GLFWwindow*, Window*> sInstanceMap;
 
 
 	public:
