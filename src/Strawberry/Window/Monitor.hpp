@@ -4,23 +4,32 @@
 // GLFW 3
 #include "GLFW.hpp"
 // Strawberry Core
+#include "GLFW/glfw3.h"
 #include "Strawberry/Core/Math/Vector.hpp"
-// Standard Library
-#include <vector>
 
 
 namespace Strawberry::Window
 {
-	struct MonitorInfo
+	class Monitor
 		: GLFWUser
 	{
-		Core::Math::Vec2u mResolution;
-		Core::Math::Vec2u mPhysicalSizeMM;
+		friend class Window;
 
 
-		Core::Math::Vec2f GetDPI() const noexcept;
+	public:
+		Core::Math::Vec2u GetCurrentResolution() const noexcept;
+
+		Core::Math::Vec2f GetContentScale() const noexcept;
+
+		Core::Math::Vec2i GetPhysicalSizeMM() const noexcept;
+		Core::Math::Vec2  GetPhysicalSizeIn() const noexcept;
+		Core::Math::Vec2  GetDPI() const noexcept;
+
+
+	private:
+		Monitor(GLFWmonitor* monitor) noexcept;
+
+
+		GLFWmonitor* mMonitor;
 	};
-
-
-	std::vector<MonitorInfo> GetMonitorInfo();
 }

@@ -9,14 +9,12 @@
 #include "Strawberry/Window/Event.hpp"
 // Strawberry Core
 #include "Strawberry/Core/Math/Vector.hpp"
-#include "Strawberry/Core/Sync/Mutex.hpp"
 #include "Strawberry/Core/Sync/Spinlock.hpp"
 #include "Strawberry/Core/Types/Optional.hpp"
 // GLFW 3
 #include "GLFW/glfw3.h"
+#include "Strawberry/Window/Monitor.hpp"
 // Standard Library
-#include <atomic>
-#include <concepts>
 #include <deque>
 #include <map>
 #include <string>
@@ -59,24 +57,18 @@ namespace Strawberry::Window
 		Window& operator=(Window&& rhs) noexcept;
 		~Window();
 
+
+		Monitor GetMonitor() const noexcept;
+
+
 		Core::Optional<Event> NextEvent();
 
-		Core::Math::Vec2f GetContentScale() const noexcept;
 
 		bool CloseRequested() const;
 
+
 		[[nodiscard]] Core::Math::Vec2i GetSize() const;
 		[[nodiscard]] Core::Math::Vec2i GetFramebufferSize() const;
-		[[nodiscard]] Core::Math::Vec2f GetPhysicalSizeMM() const;
-		[[nodiscard]] Core::Math::Vec2f GetPhysicalSizeInches() const;
-		[[nodiscard]] Core::Math::Vec2f GetDPI() const;
-
-
-		template<std::movable T, typename... Args> requires (std::constructible_from<T, const Window&, Args...>)
-		T Create(const Args&... args)
-		{
-			return T(*this, std::forward<const Args&>(args)...);
-		}
 
 
 		bool HasFocus() const noexcept;
@@ -87,6 +79,7 @@ namespace Strawberry::Window
 
 
 		void SetIcon(const std::filesystem::path& iconFile);
+
 
 		void SetCursorEnabled(bool enabled);
 		void SetRawMouseInputEnabled(bool enabled);

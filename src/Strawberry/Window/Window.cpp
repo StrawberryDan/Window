@@ -73,6 +73,15 @@ namespace Strawberry::Window
 	}
 
 
+	Monitor Window::GetMonitor() const noexcept
+	{
+		GLFWmonitor* monitor = glfwGetWindowMonitor(mHandle);
+		if (!monitor) [[unlikely]] monitor = glfwGetPrimaryMonitor();
+		Core::AssertNEQ(monitor, nullptr);
+		return Monitor(monitor);
+	}
+
+
 	Core::Optional<Event> Window::NextEvent()
 	{
 		ZoneScoped;
@@ -85,14 +94,6 @@ namespace Strawberry::Window
 		auto event(mEventQueue.front());
 		mEventQueue.pop_front();
 		return event;
-	}
-
-
-	Core::Math::Vec2f Window::GetContentScale() const noexcept
-	{
-		Core::Math::Vec2f v;
-		glfwGetWindowContentScale(mHandle, &v[0], &v[1]);
-		return v;
 	}
 
 
@@ -117,28 +118,6 @@ namespace Strawberry::Window
 		Core::Math::Vec2i framebufferSize;
 		glfwGetFramebufferSize(mHandle, &framebufferSize[0], &framebufferSize[1]);
 		return framebufferSize;
-	}
-
-
-	Core::Math::Vec2f Window::GetPhysicalSizeMM() const
-	{
-		int x, y;
-		glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(), &x, &y);
-		return {x, y};
-	}
-
-
-	Core::Math::Vec2f Window::GetPhysicalSizeInches() const
-	{
-		return 0.0393701 * GetPhysicalSizeMM();
-	}
-
-
-	Core::Math::Vec2f Window::GetDPI() const
-	{
-		const auto physicalSize = GetPhysicalSizeInches();
-		const auto size = GetSize();
-		return physicalSize.Piecewise(std::divides{}, size);
 	}
 
 
