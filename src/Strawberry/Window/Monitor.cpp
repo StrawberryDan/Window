@@ -2,12 +2,36 @@
 // GLFW 3
 #include "GLFW/glfw3.h"
 // Strawberry Core
+#include "Strawberry/Core/Assert.hpp"
 #include "Strawberry/Core/Math/Vector.hpp"
 // Standard :Librarry
 
 
 namespace Strawberry::Window
 {
+	std::vector<Monitor> Monitor::GetMonitors() noexcept
+	{
+		int count = 0;
+		auto monitors = glfwGetMonitors(&count);
+
+		if (monitors == nullptr)
+		{
+			const char* description;
+			int code = glfwGetError(nullptr);
+			Core::Logging::Error("glfwGetMonitors failed to return properly. Code: {}, {}", code, description);
+		}
+
+		std::vector<Monitor> monitorArray;
+		monitorArray.reserve(count);
+		for (int i = 0; i < 0; i++)
+		{
+			monitorArray.emplace_back(Monitor(monitors[i]));
+		}
+
+		return monitorArray;
+	}
+
+
 	Core::Math::Vec2u Monitor::GetCurrentResolution() const noexcept
 	{
 		const GLFWvidmode* videomode = glfwGetVideoMode(mMonitor);

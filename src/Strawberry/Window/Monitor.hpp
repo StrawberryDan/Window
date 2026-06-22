@@ -17,6 +17,9 @@ namespace Strawberry::Window
 
 
 	public:
+		static std::vector<Monitor> GetMonitors() noexcept;
+
+
 		Core::Math::Vec2u GetCurrentResolution() const noexcept;
 
 		Core::Math::Vec2f GetContentScale() const noexcept;
