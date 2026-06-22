@@ -69,6 +69,7 @@ namespace Strawberry::Window
 
 		[[nodiscard]] Core::Math::Vec2i GetSize() const;
 		[[nodiscard]] Core::Math::Vec2i GetFramebufferSize() const;
+		[[nodiscard]] Core::Math::Vec2f GetContentScale() const;;
 
 
 		bool HasFocus() const noexcept;

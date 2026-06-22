@@ -121,6 +121,14 @@ namespace Strawberry::Window
 	}
 
 
+	Core::Math::Vec2f Window::GetContentScale() const
+	{
+		float x, y;
+		glfwGetWindowContentScale(mHandle, &x, &y);
+		return { x, y };
+	}
+
+
 	bool Window::HasFocus() const noexcept
 	{
 		return mHasFocus;
